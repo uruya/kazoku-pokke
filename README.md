@@ -10,17 +10,19 @@
 
 - Node.js 20.19以上
 - npm 10以上を推奨
+- Docker Desktop または Docker Engine（ローカルPostgreSQL用）
 
 ### 起動方法
 
 ~~~bash
 npm install
+npm run db:up
 npm run dev
 ~~~
 
 ブラウザで [http://localhost:3000](http://localhost:3000) を開きます。
 
-初回の npm install で .env.example から .env を自動作成します。初回の npm run dev では空のSQLiteファイルを初期化してマイグレーションだけを自動実行します。画面で家庭名を登録するまで育児データは作成されず、ダミーデータも投入されません。
+初回の npm install で .env.example から .env を自動作成します。npm run db:up でローカル開発用のPostgreSQLを起動し、npm run dev の前処理でマイグレーションを自動適用します。画面で家庭名を登録するまで育児データは作成されず、ダミーデータも投入されません。
 
 ## 使用技術
 
@@ -30,11 +32,11 @@ npm run dev
 - Tailwind CSS 4
 - Next.js Server Actions
 - Prisma 6
-- SQLite（開発用）
+- PostgreSQL 16
 - Vitest
 - ESLint
 
-データモデルはSQLite固有のJSONや生SQLに依存せず、後からPrismaのdatasourceとマイグレーションを調整してPostgreSQLへ移行しやすい構成にしています。
+データベースはローカル開発・本番ともPostgreSQLを前提とし、Prisma経由でアクセスします。
 
 ## MVPで実装した機能
 
@@ -81,7 +83,7 @@ npm run dev
 - 初回に家庭を作成し、「その他」から複数の家庭を追加・切り替え
 - 利用者と家庭を `HouseholdMember` で関連付け、所属していない家庭は選択不可
 - 一覧・集計・作成・編集・完了切り替え・削除のすべてでサーバー側の家庭境界を検証
-- 既存データがあるDBの移行時だけ、データを失わないため未所属の家庭へ引き継ぎ
+- 新規DBには家庭や育児データを自動投入せず、初回設定で利用者が家庭を作成
 
 ## 画面
 
@@ -114,7 +116,7 @@ npm run db:migrate
 
 ## データとプライバシー
 
-開発データは prisma/dev.db に保存されます。このファイルと .env はGit管理から除外されています。家庭ごとのデータ境界と、推測困難なトークンを使うHttpOnly Cookieセッションを実装しています。
+開発データはDocker Composeで起動するPostgreSQLの postgres_data ボリュームに保存されます。.env はGit管理から除外されています。家庭ごとのデータ境界と、推測困難なトークンを使うHttpOnly Cookieセッションを実装しています。
 
 現段階のセッションはメールアドレスやパスワードを持たない端末単位です。Cookieを削除すると同じ利用者として戻れないため、本番公開前にメールのマジックリンクや外部認証へ接続し、アカウント復旧、家族招待、CSRF対策、セッション失効管理を追加してください。`User`・`Session`・`HouseholdMember` を分離しているため、育児データのテナント構造を変えずに認証方式だけを置き換えられます。
 
@@ -125,7 +127,7 @@ npm run db:migrate
 - 外部カレンダーへの書き出し
 - 保育園ごとの繰り返し持ち物テンプレート
 - 予防接種スケジュールの任意生成
-- PostgreSQLへの移行とバックアップ
+- PostgreSQLの定期バックアップと復旧手順
 - 監査ログ、入力エラーのインライン表示
 
 SNS、チャット、AI、LINE連携、写真、課金などはMVPの範囲外です。

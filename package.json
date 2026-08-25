@@ -7,7 +7,7 @@
   },
   "scripts": {
     "preinstall": "node scripts/ensure-env.mjs",
-    "predev": "node scripts/ensure-database.mjs && prisma migrate deploy",
+    "predev": "prisma migrate deploy",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -16,7 +16,10 @@
     "test": "vitest run",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@prisma/client": "6.19.0",

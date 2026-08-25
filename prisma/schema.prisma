@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String            @id @default(cuid())
+  displayName String?
+  memberships HouseholdMember[]
+  sessions    Session[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_session_user_id")
+  @@index([expiresAt], map: "idx_session_expires_at")
+}
+
+model Household {
+  id               String            @id @default(cuid())
+  name             String
+  members          HouseholdMember[]
+  children         Child[]
+  todos            Todo[]
+  nurseryItems     NurseryItem[]
+  medicalSchedules MedicalSchedule[]
+  shoppingItems    ShoppingItem[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model HouseholdMember {
+  householdId String
+  userId      String
+  role        String    @default("MEMBER")
+  createdAt   DateTime  @default(now())
+  household   Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([householdId, userId])
+  @@index([userId], map: "idx_household_member_user_id")
+}
+
+model Child {
+  id           String    @id @default(cuid())
+  nickname     String
+  birthDate    DateTime
+  clothingSize String?
+  shoeSize     String?
+  note         String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  householdId  String
+  household    Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@unique([id, householdId])
+  @@index([householdId, createdAt], map: "idx_child_household_created_at")
+}
+
+model Todo {
+  id          String    @id @default(cuid())
+  title       String
+  category    String    @default("OTHER")
+  dueDate     DateTime?
+  isCompleted Boolean   @default(false)
+  note        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  householdId String
+  household   Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@unique([id, householdId])
+  @@index([householdId, isCompleted, dueDate], map: "idx_todo_household_status_due_date")
+}
+
+model NurseryItem {
+  id          String    @id @default(cuid())
+  title       String
+  type        String
+  date        DateTime
+  isCompleted Boolean   @default(false)
+  note        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  householdId String
+  household   Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@unique([id, householdId])
+  @@index([householdId, isCompleted, date], map: "idx_nursery_household_status_date")
+  @@index([householdId, type, date], map: "idx_nursery_household_type_date")
+}
+
+model MedicalSchedule {
+  id           String    @id @default(cuid())
+  title        String
+  date         DateTime
+  hospitalName String?
+  isCompleted  Boolean   @default(false)
+  note         String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  householdId  String
+  household    Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@unique([id, householdId])
+  @@index([householdId, isCompleted, date], map: "idx_medical_household_status_date")
+}
+
+model ShoppingItem {
+  id          String    @id @default(cuid())
+  name        String
+  category    String    @default("OTHER")
+  isPurchased Boolean   @default(false)
+  note        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  householdId String
+  household   Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+
+  @@unique([id, householdId])
+  @@index([householdId, isPurchased, createdAt], map: "idx_shopping_household_status_created_at")
+}

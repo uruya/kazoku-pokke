@@ -1,0 +1,40 @@
+{
+  "name": "kosodate-note",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "preinstall": "node scripts/ensure-env.mjs",
+    "predev": "node scripts/ensure-database.mjs && prisma migrate deploy",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.0",
+    "next": "^16.3.2",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "3.3.6",
+    "@tailwindcss/postcss": "4.1.14",
+    "@types/node": "22.18.10",
+    "@types/react": "19.1.16",
+    "@types/react-dom": "19.1.9",
+    "eslint": "9.35.0",
+    "eslint-config-next": "15.5.21",
+    "prisma": "^6.12.0",
+    "tailwindcss": "4.1.14",
+    "typescript": "5.9.3",
+    "vitest": "^3.2.7"
+  }
+}

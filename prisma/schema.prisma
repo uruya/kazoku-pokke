@@ -8,14 +8,19 @@ datasource db {
 }
 
 model User {
-  id          String            @id @default(cuid())
-  displayName String?
-  memberships HouseholdMember[]
-  sessions    Session[]
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  id                  String                @id @default(cuid())
+  authUserId          String?               @unique
+  email               String?               @unique
+  displayName         String?
+  memberships         HouseholdMember[]
+  sessions            Session[]
+  invitationsCreated  HouseholdInvitation[] @relation("InvitationCreator")
+  invitationsAccepted HouseholdInvitation[] @relation("InvitationAccepter")
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
 }
 
+// Temporary migration bridge for users created by the former device-cookie auth.
 model Session {
   id        String   @id @default(cuid())
   tokenHash String   @unique
@@ -28,8 +33,25 @@ model Session {
   @@index([expiresAt], map: "idx_session_expires_at")
 }
 
+model HouseholdInvitation {
+  id               String    @id @default(cuid())
+  householdId      String
+  tokenHash        String    @unique
+  createdByUserId  String
+  acceptedByUserId String?
+  expiresAt        DateTime
+  acceptedAt       DateTime?
+  createdAt        DateTime  @default(now())
+  household        Household @relation(fields: [householdId], references: [id], onDelete: Cascade)
+  createdBy        User      @relation("InvitationCreator", fields: [createdByUserId], references: [id], onDelete: Cascade)
+  acceptedBy       User?     @relation("InvitationAccepter", fields: [acceptedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([householdId, acceptedAt, expiresAt], map: "idx_invitation_household_status_expires_at")
+  @@index([createdByUserId], map: "idx_invitation_created_by_user_id")
+}
+
 model Household {
-  id               String            @id @default(cuid())
+  id               String                @id @default(cuid())
   name             String
   members          HouseholdMember[]
   children         Child[]
@@ -37,8 +59,9 @@ model Household {
   nurseryItems     NurseryItem[]
   medicalSchedules MedicalSchedule[]
   shoppingItems    ShoppingItem[]
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  invitations      HouseholdInvitation[]
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
 }
 
 model HouseholdMember {

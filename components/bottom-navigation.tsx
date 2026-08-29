@@ -11,10 +11,14 @@ const items = [
   { href: "/more", icon: "•••", label: "その他" },
 ] as const;
 
+const navigationHiddenPaths = ["/login", "/welcome", "/invite", "/auth"];
+
 export function BottomNavigation() {
   const pathname = usePathname();
 
-  if (pathname === "/welcome") return null;
+  if (navigationHiddenPaths.some((path) => pathname.startsWith(path))) {
+    return null;
+  }
 
   return (
     <nav
@@ -28,7 +32,7 @@ export function BottomNavigation() {
               ? pathname === "/"
               : pathname.startsWith(item.href) ||
                 (item.href === "/more" &&
-                  ["/medical", "/children"].some((path) =>
+                  ["/medical", "/children", "/households"].some((path) =>
                     pathname.startsWith(path),
                   ));
 

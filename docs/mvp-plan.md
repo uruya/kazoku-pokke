@@ -14,8 +14,9 @@
 - 子どもの最小限のプロフィールを作成・編集・削除する
 - 病院・予防接種予定を作成・編集・削除・完了切り替えする
 - 買い物を作成・編集・削除・購入済み切り替えする
-- 家庭単位のテナント分離と端末セッションを含める
-- メール認証、家族招待、高度な権限、通知、外部連携、写真、課金、AIは含めない
+- 家庭単位のテナント分離とSupabase AuthのメールOTPログインを含める
+- 期限付きの家族招待、ログアウト、別端末からの再ログインを含める
+- 高度な権限、通知、外部連携、写真、課金、AIは含めない
 
 ### UX原則
 
@@ -35,18 +36,22 @@
 | 病院 | `/medical` | 病院・予防接種予定の一覧とCRUD |
 | 買い物 | `/shopping` | 未購入・購入済みの一覧とCRUD |
 | 子ども | `/children` | プロフィール一覧とCRUD |
-| 初回設定 | `/welcome` | 利用者と最初の家庭を作成 |
+| ログイン | `/login` | メールOTPの送信と確認 |
+| 招待 | `/invite/[token]` | 家庭への参加 |
+| 初回設定 | `/welcome` | 最初の家庭を作成 |
 | 家庭管理 | `/households` | 所属家庭の一覧、追加、切り替え |
 
 全画面で下部ナビゲーションを共有し、ホームから主要情報へ直接移動できる。
 
 ## 3. Prismaデータモデル案
 
-### User / Session / Household / HouseholdMember
+### User / Household / HouseholdMember / HouseholdInvitation
 
 - `Household` をテナント境界とし、すべての業務データが必ず `householdId` を持つ
 - `User` と `Household` は多対多で、`HouseholdMember` が所属と役割を保持する
-- `Session` は生のトークンを保存せずSHA-256ハッシュと期限だけを保持する
+- `User.authUserId` でSupabase Authの安定IDとアプリ利用者を関連付ける
+- `HouseholdInvitation` は招待トークンのSHA-256ハッシュ、期限、承認状態だけを保持する
+- 旧 `Session` は端末Cookie利用者を最初のSupabaseアカウントへ引き継ぐ移行ブリッジとして一時的に残す
 - 選択中の家庭IDはHttpOnly Cookieへ保存するが、サーバー側で毎回Membershipを確認する
 - 更新と削除は `id + householdId` の複合一意キーを使い、他家庭のIDを渡しても操作できない
 
@@ -130,4 +135,4 @@ tests/                  # ビジネスロジックの単体テスト
 
 PostgreSQLの検索インデックスは家庭IDを先頭に置き、家庭内の未完了・期限順検索へ合わせています。
 
-現在はローカルMVP向けの端末セッションです。本番SaaS化では認証プロバイダーの安定IDを `User` に接続し、招待を承認した時だけ `HouseholdMember` を追加します。OWNER/MEMBERの役割は用意していますが、今回の全CRUDは両者に許可し、高度な権限管理は追加していません。
+Supabase Authが検証したユーザーIDを `User` に接続し、期限内の招待を承認した時だけ `HouseholdMember` を追加します。招待の発行・無効化はOWNERだけに許可し、育児データのCRUDはOWNERとMEMBERの両者に許可します。

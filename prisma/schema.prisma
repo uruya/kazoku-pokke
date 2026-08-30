@@ -3,21 +3,36 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id                  String                @id @default(cuid())
-  authUserId          String?               @unique
-  email               String?               @unique
-  displayName         String?
-  memberships         HouseholdMember[]
-  sessions            Session[]
-  invitationsCreated  HouseholdInvitation[] @relation("InvitationCreator")
-  invitationsAccepted HouseholdInvitation[] @relation("InvitationAccepter")
-  createdAt           DateTime              @default(now())
-  updatedAt           DateTime              @updatedAt
+  id                   String                @id @default(cuid())
+  authUserId           String?               @unique
+  email                String?               @unique
+  displayName          String?
+  emailReminderEnabled Boolean               @default(false)
+  memberships          HouseholdMember[]
+  sessions             Session[]
+  reminderDeliveries   ReminderDelivery[]
+  invitationsCreated   HouseholdInvitation[] @relation("InvitationCreator")
+  invitationsAccepted  HouseholdInvitation[] @relation("InvitationAccepter")
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+}
+
+model ReminderDelivery {
+  id         String    @id @default(cuid())
+  userId     String
+  targetDate DateTime
+  sentAt     DateTime?
+  createdAt  DateTime  @default(now())
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, targetDate])
+  @@index([targetDate], map: "idx_reminder_delivery_target_date")
 }
 
 // Temporary migration bridge for users created by the former device-cookie auth.

@@ -19,7 +19,8 @@
     "postinstall": "prisma generate",
     "db:up": "docker compose up -d db",
     "db:down": "docker compose down",
-    "db:deploy": "prisma migrate deploy"
+    "db:deploy": "prisma migrate deploy",
+    "reminders:trigger": "node scripts/trigger-reminders.mjs"
   },
   "dependencies": {
     "@prisma/client": "6.19.0",

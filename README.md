@@ -24,6 +24,10 @@ npm run dev
 
 初回の npm install で .env.example から .env を自動作成します。npm run db:up でローカル開発用のPostgreSQLを起動し、npm run dev の前処理でマイグレーションを自動適用します。画面で家庭名を登録するまで育児データは作成されず、ダミーデータも投入されません。
 
+### Supabase PostgreSQLの接続
+
+Supabase本番環境では、アプリ実行用の `DATABASE_URL` にTransaction pooler（ポート6543、`pgbouncer=true&connection_limit=1`）、マイグレーション用の `DIRECT_URL` にSession pooler（ポート5432）を設定します。これによりWebアクセスでSession接続上限を消費し続けることを防ぎます。
+
 ### Supabase Authの設定
 
 1. Supabaseでプロジェクトを作成し、Project URLとPublishable Keyを確認します。
@@ -33,6 +37,15 @@ npm run dev
 
 Supabase標準のメール送信は開発確認用です。家族などプロジェクトメンバー以外へ本番メールを送る前に、Authentication → SMTP Settingsで独自SMTPを設定してください。
 
+### 期限前メール通知の設定
+
+1. ResendでAPIキーを作成し、`RESEND_API_KEY` に設定します。
+2. Resendで認証済みの送信元を `REMINDER_EMAIL_FROM` に設定します。
+3. 推測されにくいランダム文字列を `CRON_SECRET` に設定します。WebサービスとCronサービスで同じ値を使います。
+4. Railwayで同じリポジトリからCron用サービスを追加し、Start Commandを `npm run reminders:trigger`、Cron Scheduleを `0 23 * * *` にします。Railway CronはUTC基準のため、日本時間の毎朝8時に実行されます。
+
+Cron用サービスにも `NEXT_PUBLIC_APP_URL` と `CRON_SECRET` を設定してください。通知対象は「その他」で前日メール通知を有効にした利用者だけです。
+
 ## 使用技術
 
 - Next.js 16 App Router
@@ -41,6 +54,7 @@ Supabase標準のメール送信は開発確認用です。家族などプロジ
 - Tailwind CSS 4
 - Next.js Server Actions
 - Prisma 6
+- Resend Email API
 - PostgreSQL 16
 - Supabase Auth（メールOTP・SSR Cookieセッション）
 - Vitest
@@ -67,6 +81,13 @@ Supabase標準のメール送信は開発確認用です。家族などプロジ
 - 招待承認後に同じ家庭の情報を共有
 - ログアウト
 - 旧端末セッションから最初の認証アカウントへ既存データを引き継ぎ
+
+### 期限前メール通知
+
+- TODO・保育園・病院予定の期限・予定日1日前を日本時間で抽出
+- 利用者ごとに1日1通へまとめてResendから送信
+- 通知のON/OFF、同日重複送信防止、失敗時の再試行
+- 秘密トークンで保護した定期実行用Route Handler
 
 ### TODO管理
 
@@ -146,7 +167,7 @@ npm run db:migrate
 ## 今後追加すると良さそうな機能
 
 - Google・Appleなどの外部認証
-- 期限前の通知
+- 通知時刻・何日前かの個別設定
 - 外部カレンダーへの書き出し
 - 保育園ごとの繰り返し持ち物テンプレート
 - 予防接種スケジュールの任意生成

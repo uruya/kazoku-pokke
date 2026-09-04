@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { logout } from "@/app/actions/auth";
-import { updateNotificationSettings } from "@/app/actions/notification-settings";
+import { NotificationSettingsForm } from "@/components/notification-settings-form";
 import { PageHeader } from "@/components/page-header";
 import { formatDateTime } from "@/lib/date";
 import { prisma } from "@/lib/prisma";
@@ -79,20 +79,9 @@ export default async function MorePage() {
           <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
             TODO・保育園・病院予定を、期限・予定日の1日前にまとめてメールします。
           </p>
-          <form action={updateNotificationSettings} className="mt-4">
-            <label className="flex min-h-12 items-center gap-3 rounded-xl bg-[var(--surface)] px-4">
-              <input
-                type="checkbox"
-                name="enabled"
-                defaultChecked={user.emailReminderEnabled}
-                className="h-5 w-5 accent-[var(--primary)]"
-              />
-              <span className="font-bold">前日メール通知を受け取る</span>
-            </label>
-            <button className="mt-3 min-h-11 rounded-xl bg-[var(--primary)] px-4 text-sm font-extrabold text-white">
-              通知設定を保存
-            </button>
-          </form>
+          <NotificationSettingsForm
+            initialEnabled={user.emailReminderEnabled}
+          />
         </section>
 
         <section className="rounded-2xl border border-[var(--line)] bg-white p-4 md:col-span-2">

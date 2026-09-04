@@ -1,3 +1,9 @@
+import nextEnv from "@next/env";
+
+const { loadEnvConfig } = nextEnv;
+
+loadEnvConfig(process.cwd());
+
 const appUrl = process.env.NEXT_PUBLIC_APP_URL;
 const secret = process.env.CRON_SECRET;
 

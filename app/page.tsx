@@ -26,7 +26,7 @@ export default async function Home() {
     shoppingItems,
     shoppingCount,
     nextMedical,
-  ] = await Promise.all([
+  ] = await prisma.$transaction([
     prisma.todo.findMany({
       where: {
         householdId,

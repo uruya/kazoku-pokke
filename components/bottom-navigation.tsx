@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import { usePathname } from "next/navigation";
 
 const items = [
@@ -12,6 +12,23 @@ const items = [
 ] as const;
 
 const navigationHiddenPaths = ["/login", "/welcome", "/invite", "/auth"];
+
+function NavigationIcon({ icon }: { icon: string }) {
+  const { pending } = useLinkStatus();
+
+  return (
+    <span
+      aria-hidden="true"
+      className="flex h-7 min-w-8 items-center justify-center rounded-full px-2 text-lg leading-none"
+    >
+      {pending ? (
+        <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-r-transparent motion-reduce:animate-none" />
+      ) : (
+        icon
+      )}
+    </span>
+  );
+}
 
 export function BottomNavigation() {
   const pathname = usePathname();
@@ -41,13 +58,13 @@ export function BottomNavigation() {
               key={item.href}
               href={item.href}
               aria-current={active ? "page" : undefined}
+              aria-label={item.label}
               className={`flex min-h-11 flex-col items-center justify-center gap-0.5 text-xs font-bold transition-colors ${active ? "text-[var(--primary)]" : "text-[var(--muted)]"}`}
             >
               <span
-                aria-hidden="true"
-                className={`flex h-7 min-w-8 items-center justify-center rounded-full px-2 text-lg leading-none ${active ? "bg-[var(--primary-soft)]" : ""}`}
+                className={`rounded-full ${active ? "bg-[var(--primary-soft)]" : ""}`}
               >
-                {item.icon}
+                <NavigationIcon icon={item.icon} />
               </span>
               {item.label}
             </Link>

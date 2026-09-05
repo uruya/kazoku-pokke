@@ -117,6 +117,7 @@ export default async function Home() {
               </div>
               <Link
                 href="/todos"
+                prefetch
                 className="flex min-h-11 items-center rounded-xl bg-white px-4 text-sm font-extrabold text-[var(--primary)]"
               >
                 一覧を見る
@@ -143,6 +144,7 @@ export default async function Home() {
               {todayTodos.map((todo) => (
                 <Link
                   href="/todos"
+                  prefetch
                   key={todo.id}
                   className="flex min-h-14 items-center gap-3 py-2"
                 >
@@ -164,6 +166,7 @@ export default async function Home() {
             <h2 className="text-lg font-extrabold">期限が近いTODO</h2>
             <Link
               href="/todos"
+              prefetch
               className="min-h-11 py-2 text-sm font-bold text-[var(--primary)]"
             >
               すべて見る
@@ -192,6 +195,7 @@ export default async function Home() {
             <h2 className="text-lg font-extrabold">今週の予定</h2>
             <Link
               href="/nursery"
+              prefetch
               className="min-h-11 py-2 text-sm font-bold text-[var(--primary)]"
             >
               保育園を見る
@@ -206,6 +210,7 @@ export default async function Home() {
               {weeklySchedules.map((item) => (
                 <Link
                   href={item.href}
+                  prefetch
                   key={`${item.href}-${item.id}`}
                   className={`flex gap-3 rounded-xl p-3 ${
                     item.tone === "green"
@@ -239,6 +244,7 @@ export default async function Home() {
             <h2 className="text-lg font-extrabold">買うもの</h2>
             <Link
               href="/shopping"
+              prefetch
               className="min-h-11 py-2 text-sm font-bold text-[var(--primary)]"
             >
               リストへ
@@ -258,7 +264,11 @@ export default async function Home() {
         <section className="rounded-2xl border border-[var(--line)] bg-white p-4">
           <p className="text-xs font-bold text-[var(--muted)]">次回の病院予定</p>
           {nextMedical ? (
-            <Link href="/medical" className="mt-2 flex items-center gap-3">
+            <Link
+              href="/medical"
+              prefetch
+              className="mt-2 flex items-center gap-3"
+            >
               <span
                 className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-xl"
                 aria-hidden="true"

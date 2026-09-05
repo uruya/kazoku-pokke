@@ -33,6 +33,7 @@ export default async function MorePage() {
       <div className="mx-auto grid max-w-5xl gap-3 px-4 py-5 md:grid-cols-2 md:px-10">
         <Link
           href="/households"
+          prefetch
           className="flex min-h-24 items-center gap-4 rounded-2xl border border-[var(--line)] bg-white p-4 md:col-span-2"
         >
           <span aria-hidden="true" className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-xl font-black text-[var(--primary)]">家</span>
@@ -47,6 +48,7 @@ export default async function MorePage() {
 
         <Link
           href="/medical"
+          prefetch
           className="flex min-h-24 items-center gap-4 rounded-2xl border border-[var(--line)] bg-white p-4"
         >
           <span aria-hidden="true" className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-xl">＋</span>
@@ -63,6 +65,7 @@ export default async function MorePage() {
 
         <Link
           href="/children"
+          prefetch
           className="flex min-h-24 items-center gap-4 rounded-2xl border border-[var(--line)] bg-white p-4"
         >
           <span aria-hidden="true" className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--primary-soft)] text-xl font-black text-[var(--primary)]">子</span>

@@ -17,6 +17,7 @@ export function PageHeader({
         {backHref ? (
           <Link
             href={backHref}
+            prefetch
             className="mb-2 inline-flex min-h-11 items-center text-sm font-bold text-[var(--primary)]"
           >
             ← 戻る

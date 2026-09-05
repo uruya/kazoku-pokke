@@ -57,6 +57,7 @@ export function BottomNavigation() {
             <Link
               key={item.href}
               href={item.href}
+              prefetch
               aria-current={active ? "page" : undefined}
               aria-label={item.label}
               className={`flex min-h-11 flex-col items-center justify-center gap-0.5 text-xs font-bold transition-colors ${active ? "text-[var(--primary)]" : "text-[var(--muted)]"}`}

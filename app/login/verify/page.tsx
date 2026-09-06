@@ -21,7 +21,7 @@ export default async function VerifyPage({
   return (
     <main className="min-h-dvh bg-[var(--primary)] px-5 py-10 text-white">
       <div className="mx-auto max-w-lg">
-        <p className="text-sm font-bold text-white/75">すくすくノート</p>
+        <p className="text-sm font-bold text-white/75">かぞくポッケ</p>
         <h1 className="mt-2 text-3xl font-extrabold tracking-tight">
           確認コードを入力
         </h1>

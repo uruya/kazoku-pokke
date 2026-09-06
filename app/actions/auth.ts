@@ -29,6 +29,11 @@ export async function requestEmailOtp(
   _state: AuthActionState,
   formData: FormData,
 ): Promise<AuthActionState> {
+  if (formData.get("acceptTerms") !== "on") {
+    return {
+      error: "利用規約とプライバシーポリシーへの同意が必要です。",
+    };
+  }
   const email = emailFrom(formData);
   if (!email) {
     return { error: "正しいメールアドレスを入力してください。" };

@@ -17,7 +17,7 @@ export default function GlobalError({ error, retry }: GlobalErrorProps) {
             '-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif',
         }}
       >
-        <title>エラー | すくすくノート</title>
+        <title>エラー | かぞくポッケ</title>
         <main
           role="alert"
           style={{

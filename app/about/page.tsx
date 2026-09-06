@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "家族の予定をひとつに",
   description:
-    "すくすくノートは、保育園、育児TODO、病院・予防接種、買い物を家族で共有できるアプリです。",
+    "かぞくポッケは、保育園、育児TODO、病院・予防接種、買い物を家族で共有できるアプリです。",
 };
 
 const features = [
@@ -216,7 +216,7 @@ export default function AboutPage() {
               <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[var(--primary)] text-lg font-black text-white shadow-sm">
                 家
               </span>
-              <span className="font-extrabold tracking-tight">すくすくノート</span>
+              <span className="font-extrabold tracking-tight">かぞくポッケ</span>
             </Link>
             <Link
               href="/login"
@@ -351,7 +351,7 @@ export default function AboutPage() {
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--accent-soft)] text-xl text-[#bd6242]">◎</span>
             <h3 className="mt-5 text-xl font-extrabold tracking-tight">大切な情報だけを、<br />家族の手元に。</h3>
             <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-              すくすくノートは、子育てに必要な最小限の情報を扱います。住所・写真・詳細な医療情報は保存しません。
+              かぞくポッケは、子育てに必要な最小限の情報を扱います。住所・写真・詳細な医療情報は保存しません。
             </p>
             <div className="mt-5 flex flex-wrap gap-2 text-xs font-bold text-[var(--primary)]">
               <span className="rounded-full bg-[var(--primary-soft)] px-3 py-1.5">家庭ごとに分離</span>
@@ -374,14 +374,14 @@ export default function AboutPage() {
             href="/login?next=/welcome"
             className="mt-7 inline-flex min-h-13 items-center rounded-2xl bg-[var(--primary)] px-7 text-base font-extrabold text-white shadow-[0_10px_20px_rgba(38,113,95,0.2)] transition-transform hover:-translate-y-0.5"
           >
-            すくすくノートをはじめる
+            かぞくポッケをはじめる
             <span aria-hidden="true" className="ml-2 text-lg">→</span>
           </Link>
         </div>
       </section>
 
       <footer className="mx-auto flex max-w-6xl flex-col gap-3 px-5 pb-8 pt-2 text-xs font-bold text-[var(--muted)] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
-        <p>© すくすくノート</p>
+        <p>© かぞくポッケ</p>
         <div className="flex gap-4">
           <a href="#features" className="transition-colors hover:text-[var(--primary)]">できること</a>
           <Link href="/login" className="transition-colors hover:text-[var(--primary)]">ログイン</Link>

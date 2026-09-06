@@ -7,21 +7,21 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
   ),
   title: {
-    default: "すくすくノート",
-    template: "%s | すくすくノート",
+    default: "かぞくポッケ",
+    template: "%s | かぞくポッケ",
   },
   description:
     "保育園、育児TODO、病院予定、買い物を一か所で管理できる家族向けアプリ",
   openGraph: {
-    title: "すくすくノート",
+    title: "かぞくポッケ",
     description: "育児の予定を、ひとつの場所に。",
     type: "website",
     locale: "ja_JP",
-    images: [{ url: "/og.png", width: 1200, height: 630 }],
+    images: [{ url: "/og.png", width: 1731, height: 909 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "すくすくノート",
+    title: "かぞくポッケ",
     description: "育児の予定を、ひとつの場所に。",
     images: ["/og.png"],
   },

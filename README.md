@@ -132,6 +132,7 @@ Cron用サービスにも `NEXT_PUBLIC_APP_URL` と `CRON_SECRET` を設定し�
 
 | 画面 | URL |
 | --- | --- |
+| 紹介ページ | /about |
 | ログイン | /login |
 | OTP確認 | /login/verify |
 | 家庭への招待 | /invite/[token] |

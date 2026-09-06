@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { TODO_CATEGORIES, NURSERY_TYPES, optionLabel } from "@/lib/constants";
 import {
   addDays,
@@ -8,11 +9,14 @@ import {
   startOfJapanDay,
 } from "@/lib/date";
 import { prisma } from "@/lib/prisma";
-import { requireHousehold } from "@/lib/session";
+import { getCurrentUser, requireHousehold } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
+  const user = await getCurrentUser();
+  if (!user) redirect("/about");
+
   const { householdId, household } = await requireHousehold();
   const today = startOfJapanDay();
   const tomorrow = addDays(today, 1);

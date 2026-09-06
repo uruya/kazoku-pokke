@@ -11,7 +11,13 @@ const items = [
   { href: "/more", icon: "•••", label: "その他" },
 ] as const;
 
-const navigationHiddenPaths = ["/login", "/welcome", "/invite", "/auth"];
+const navigationHiddenPaths = [
+  "/about",
+  "/login",
+  "/welcome",
+  "/invite",
+  "/auth",
+];
 
 function NavigationIcon({ icon }: { icon: string }) {
   const { pending } = useLinkStatus();

@@ -382,8 +382,11 @@ export default function AboutPage() {
 
       <footer className="mx-auto flex max-w-6xl flex-col gap-3 px-5 pb-8 pt-2 text-xs font-bold text-[var(--muted)] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-12">
         <p>© かぞくポッケ</p>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
           <a href="#features" className="transition-colors hover:text-[var(--primary)]">できること</a>
+          <Link href="/terms" className="transition-colors hover:text-[var(--primary)]">利用規約</Link>
+          <Link href="/privacy" className="transition-colors hover:text-[var(--primary)]">プライバシー</Link>
+          <Link href="/contact" className="transition-colors hover:text-[var(--primary)]">お問い合わせ</Link>
           <Link href="/login" className="transition-colors hover:text-[var(--primary)]">ログイン</Link>
         </div>
       </footer>

@@ -17,6 +17,9 @@ const navigationHiddenPaths = [
   "/welcome",
   "/invite",
   "/auth",
+  "/terms",
+  "/privacy",
+  "/contact",
 ];
 
 function NavigationIcon({ icon }: { icon: string }) {

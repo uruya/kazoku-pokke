@@ -37,6 +37,12 @@ Supabase本番環境では、アプリ実行用の `DATABASE_URL` にTransaction
 
 Supabase標準のメール送信は開発確認用です。家族などプロジェクトメンバー以外へ本番メールを送る前に、Authentication → SMTP Settingsで独自SMTPを設定してください。
 
+### 公開情報と問い合わせ窓口
+
+一般公開前に `CONTACT_EMAIL` へ問い合わせ受付用のメールアドレスを設定してください。設定したアドレスは `/contact` に公開され、個人情報の開示・訂正・削除等の請求窓口にも使用されます。
+
+利用規約は `/terms`、プライバシーポリシーは `/privacy`、問い合わせ先は `/contact` で公開されます。運用実態や利用サービスを変更した場合は、各ページの記載も更新してください。
+
 ### 期限前メール通知の設定
 
 1. ResendでAPIキーを作成し、`RESEND_API_KEY` に設定します。
@@ -133,6 +139,9 @@ Cron用サービスにも `NEXT_PUBLIC_APP_URL` と `CRON_SECRET` を設定し�
 | 画面 | URL |
 | --- | --- |
 | 紹介ページ | /about |
+| 利用規約 | /terms |
+| プライバシーポリシー | /privacy |
+| お問い合わせ | /contact |
 | ログイン | /login |
 | OTP確認 | /login/verify |
 | 家庭への招待 | /invite/[token] |

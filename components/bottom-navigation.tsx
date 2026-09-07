@@ -11,15 +11,14 @@ const items = [
   { href: "/more", icon: "•••", label: "その他" },
 ] as const;
 
-const navigationHiddenPaths = [
-  "/about",
-  "/login",
-  "/welcome",
-  "/invite",
-  "/auth",
-  "/terms",
-  "/privacy",
-  "/contact",
+const navigationVisiblePaths = [
+  "/todos",
+  "/nursery",
+  "/shopping",
+  "/more",
+  "/medical",
+  "/children",
+  "/households",
 ];
 
 function NavigationIcon({ icon }: { icon: string }) {
@@ -42,7 +41,10 @@ function NavigationIcon({ icon }: { icon: string }) {
 export function BottomNavigation() {
   const pathname = usePathname();
 
-  if (navigationHiddenPaths.some((path) => pathname.startsWith(path))) {
+  if (
+    pathname !== "/" &&
+    !navigationVisiblePaths.some((path) => pathname.startsWith(path))
+  ) {
     return null;
   }
 

@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { BottomNavigation } from "@/components/bottom-navigation";
 import { ToastProvider } from "@/components/ui/toast";
+import { getSiteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-  ),
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: "かぞくポッケ",
     template: "%s | かぞくポッケ",

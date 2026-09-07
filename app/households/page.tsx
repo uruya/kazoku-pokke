@@ -7,6 +7,7 @@ import { revokeInvitation } from "@/app/actions/invitations";
 import { FormPanel } from "@/components/forms/form-shell";
 import { InviteLinkForm } from "@/components/invitations/invite-link-form";
 import { PageHeader } from "@/components/page-header";
+import { ConfirmActionButton } from "@/components/ui/action-buttons";
 import { formatDateTime } from "@/lib/date";
 import { prisma } from "@/lib/prisma";
 import { requireHousehold } from "@/lib/session";
@@ -76,18 +77,23 @@ export default async function HouseholdsPage() {
                 <h3 className="text-sm font-extrabold">承認待ちのリンク</h3>
                 <div className="mt-2 grid gap-2">
                   {invitations.map((invitation) => (
-                    <form
+                    <div
                       key={invitation.id}
-                      action={revokeInvitation.bind(null, invitation.id)}
                       className="flex items-center justify-between gap-3 rounded-xl bg-[var(--surface)] p-3"
                     >
                       <p className="text-sm text-[var(--muted)]">
                         有効期限：{formatDateTime(invitation.expiresAt)}
                       </p>
-                      <button className="min-h-10 shrink-0 rounded-lg bg-white px-3 text-sm font-bold text-red-700">
-                        無効にする
-                      </button>
-                    </form>
+                      <ConfirmActionButton
+                        action={revokeInvitation.bind(null, invitation.id)}
+                        buttonLabel="無効にする"
+                        title="招待リンクを無効にしますか？"
+                        description="このリンクを受け取った家族は、今後このリンクから参加できなくなります。"
+                        confirmLabel="無効にする"
+                        pendingLabel="無効化中…"
+                        successMessage="招待リンクを無効にしました。"
+                      />
+                    </div>
                   ))}
                 </div>
               </div>

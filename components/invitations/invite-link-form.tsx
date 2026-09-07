@@ -5,6 +5,7 @@ import {
   createInvitation,
   type InvitationActionState,
 } from "@/app/actions/invitations";
+import { useToast } from "@/components/ui/toast";
 
 const initialState: InvitationActionState = {};
 
@@ -13,12 +14,18 @@ export function InviteLinkForm() {
     createInvitation,
     initialState,
   );
-  const [copied, setCopied] = useState(false);
+  const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   async function copyLink() {
     if (!state.inviteUrl) return;
-    await navigator.clipboard.writeText(state.inviteUrl);
-    setCopied(true);
+    try {
+      await navigator.clipboard.writeText(state.inviteUrl);
+      setCopiedUrl(state.inviteUrl);
+      showToast("招待リンクをコピーしました。", "success");
+    } catch {
+      showToast("コピーできませんでした。リンクを長押ししてコピーしてください。", "error");
+    }
   }
 
   return (
@@ -45,7 +52,7 @@ export function InviteLinkForm() {
             onClick={copyLink}
             className="mt-3 min-h-11 rounded-xl bg-white px-4 text-sm font-extrabold text-[var(--primary)]"
           >
-            {copied ? "コピーしました" : "リンクをコピー"}
+            {copiedUrl === state.inviteUrl ? "コピーしました" : "リンクをコピー"}
           </button>
           <p className="mt-2 text-xs text-[var(--muted)]">
             7日間・1回だけ有効です。SNSなど公開の場所には貼らないでください。

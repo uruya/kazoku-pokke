@@ -1,10 +1,11 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import {
   updateNotificationSettings,
   type NotificationSettingsActionState,
 } from "@/app/actions/notification-settings";
+import { useToast } from "@/components/ui/toast";
 
 export function NotificationSettingsForm({
   initialEnabled,
@@ -20,9 +21,12 @@ export function NotificationSettingsForm({
     initialState,
   );
   const [enabled, setEnabled] = useState(initialEnabled);
-  const showResult =
-    state.status === "error" ||
-    (state.status === "success" && state.enabled === enabled);
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    if (state.status === "idle" || !state.message) return;
+    showToast(state.message, state.status);
+  }, [showToast, state]);
 
   return (
     <form action={action} className="mt-4">
@@ -52,21 +56,6 @@ export function NotificationSettingsForm({
       >
         {pending ? "保存中…" : "通知設定を保存"}
       </button>
-      <div aria-live="polite" aria-atomic="true">
-        {showResult ? (
-          <p
-            role={state.status === "error" ? "alert" : "status"}
-            className={`mt-3 rounded-xl p-3 text-sm font-bold ${
-              state.status === "success"
-                ? "bg-emerald-50 text-emerald-800"
-                : "bg-red-50 text-red-700"
-            }`}
-          >
-            {state.status === "success" ? "✓ " : ""}
-            {state.message}
-          </p>
-        ) : null}
-      </div>
     </form>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { BottomNavigation } from "@/components/bottom-navigation";
+import { ToastProvider } from "@/components/ui/toast";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -33,10 +34,12 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <div className="mx-auto min-h-dvh max-w-6xl bg-[var(--surface)] pb-24 md:pb-8">
-          {children}
-        </div>
-        <BottomNavigation />
+        <ToastProvider>
+          <div className="mx-auto min-h-dvh max-w-6xl bg-[var(--surface)] pb-24 md:pb-8">
+            {children}
+          </div>
+          <BottomNavigation />
+        </ToastProvider>
       </body>
     </html>
   );

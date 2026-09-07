@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import {
@@ -48,13 +49,23 @@ export async function createInvitation(): Promise<InvitationActionState> {
 
 export async function revokeInvitation(invitationId: string) {
   const { householdId } = await requireOwner();
-  await prisma.householdInvitation.deleteMany({
+  const result = await prisma.householdInvitation.deleteMany({
     where: {
       id: invitationId,
       householdId,
       acceptedAt: null,
     },
   });
+
+  if (result.count !== 1) {
+    return {
+      success: false,
+      message: "この招待リンクはすでに無効か、使用済みです。",
+    };
+  }
+
+  revalidatePath("/households");
+  return { success: true, message: "招待リンクを無効にしました。" };
 }
 
 export async function acceptInvitation(

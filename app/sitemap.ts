@@ -3,6 +3,7 @@ import { getSiteUrl } from "../lib/site-url";
 
 const publicPages = [
   { path: "/about", priority: 1 },
+  { path: "/install", priority: 0.6 },
   { path: "/terms", priority: 0.4 },
   { path: "/privacy", priority: 0.4 },
   { path: "/contact", priority: 0.5 },

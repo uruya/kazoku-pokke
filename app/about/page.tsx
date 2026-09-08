@@ -385,6 +385,7 @@ export default function AboutPage() {
         <div className="flex flex-wrap gap-4">
           <a href="#features" className="transition-colors hover:text-[var(--primary)]">できること</a>
           <Link href="/terms" className="transition-colors hover:text-[var(--primary)]">利用規約</Link>
+          <Link href="/install" className="transition-colors hover:text-[var(--primary)]">ホーム画面に追加</Link>
           <Link href="/privacy" className="transition-colors hover:text-[var(--primary)]">プライバシー</Link>
           <Link href="/contact" className="transition-colors hover:text-[var(--primary)]">お問い合わせ</Link>
           <Link href="/login" className="transition-colors hover:text-[var(--primary)]">ログイン</Link>

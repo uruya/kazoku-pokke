@@ -88,8 +88,9 @@ export default async function MorePage() {
         </section>
 
         <section className="rounded-2xl border border-[var(--line)] bg-white p-4 md:col-span-2">
-          <h2 className="font-extrabold">サポートとポリシー</h2>
+          <h2 className="font-extrabold">使い方とサポート</h2>
           <div className="mt-3 flex flex-wrap gap-x-5 gap-y-3 text-sm font-bold text-[var(--primary)]">
+            <Link href="/install" className="underline">ホーム画面に追加</Link>
             <Link href="/contact" className="underline">お問い合わせ</Link>
             <Link href="/terms" className="underline">利用規約</Link>
             <Link href="/privacy" className="underline">プライバシーポリシー</Link>

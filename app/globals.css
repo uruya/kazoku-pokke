@@ -40,6 +40,19 @@ textarea {
   font: inherit;
 }
 
+/* Keep native date controls within narrow forms on iOS Safari. */
+input[type="date"],
+input[type="datetime-local"] {
+  display: block;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input::-webkit-date-and-time-value {
+  min-width: 0;
+  text-align: left;
+}
+
 button,
 a,
 summary,

@@ -89,8 +89,8 @@ export default async function ChildrenPage() {
                       {child.note}
                     </p>
                   ) : null}
-                  <div className="mt-2 flex items-center border-t border-[var(--line)] pt-2">
-                    <details className="flex-1">
+                  <div className="mt-2 flex items-start gap-2 border-t border-[var(--line)] pt-2">
+                    <details className="min-w-0 flex-1">
                       <summary className="flex min-h-11 cursor-pointer items-center text-sm font-bold text-[var(--primary)]">
                         編集する
                       </summary>

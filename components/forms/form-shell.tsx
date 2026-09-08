@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 
 export const inputClass =
-  "mt-1 min-h-12 w-full rounded-xl border border-[#cbc9c3] bg-white px-3 text-base text-[var(--foreground)] placeholder:text-[#9ba29f] focus:border-[var(--primary)] focus:outline-none";
+  "mt-1 min-h-12 min-w-0 w-full max-w-full rounded-xl border border-[#cbc9c3] bg-white px-3 text-base text-[var(--foreground)] placeholder:text-[#9ba29f] focus:border-[var(--primary)] focus:outline-none";
 
 export const textareaClass =
-  "mt-1 min-h-24 w-full resize-y rounded-xl border border-[#cbc9c3] bg-white px-3 py-2 text-base text-[var(--foreground)] placeholder:text-[#9ba29f] focus:border-[var(--primary)] focus:outline-none";
+  "mt-1 min-h-24 min-w-0 w-full max-w-full resize-y rounded-xl border border-[#cbc9c3] bg-white px-3 py-2 text-base text-[var(--foreground)] placeholder:text-[#9ba29f] focus:border-[var(--primary)] focus:outline-none";
 
-export const labelClass = "block text-sm font-bold text-[var(--foreground)]";
+export const labelClass = "block min-w-0 text-sm font-bold text-[var(--foreground)]";
 
 type FormPanelProps = {
   title: string;

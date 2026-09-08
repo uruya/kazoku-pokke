@@ -17,10 +17,25 @@ model User {
   memberships          HouseholdMember[]
   sessions             Session[]
   reminderDeliveries   ReminderDelivery[]
+  pushSubscriptions    PushSubscription[]
   invitationsCreated   HouseholdInvitation[] @relation("InvitationCreator")
   invitationsAccepted  HouseholdInvitation[] @relation("InvitationAccepter")
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
+}
+
+model PushSubscription {
+  id               String   @id @default(cuid())
+  endpoint         String   @unique
+  p256dh            String
+  auth              String
+  lastReminderDate DateTime?
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId], map: "idx_push_subscription_user_id")
 }
 
 model ReminderDelivery {

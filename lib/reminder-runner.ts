@@ -1,8 +1,10 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
+import { sendPushNotification } from "@/lib/push-notifications";
 import {
   buildReminderEmail,
+  buildReminderPush,
   reminderWindow,
   type ReminderItem,
 } from "@/lib/reminders";
@@ -11,6 +13,8 @@ import { sendReminderEmail } from "@/lib/resend";
 export type ReminderRunResult = {
   eligibleUsers: number;
   sent: number;
+  emailSent: number;
+  pushSent: number;
   skipped: number;
   failed: number;
 };
@@ -25,11 +29,14 @@ export async function runDueDateReminders(
 
   const users = await prisma.user.findMany({
     where: {
-      emailReminderEnabled: true,
-      email: { not: null },
       memberships: { some: {} },
+      OR: [
+        { emailReminderEnabled: true, email: { not: null } },
+        { pushSubscriptions: { some: {} } },
+      ],
     },
     include: {
+      pushSubscriptions: true,
       memberships: {
         include: {
           household: {
@@ -62,6 +69,8 @@ export async function runDueDateReminders(
   const result: ReminderRunResult = {
     eligibleUsers: users.length,
     sent: 0,
+    emailSent: 0,
+    pushSent: 0,
     skipped: 0,
     failed: 0,
   };
@@ -91,40 +100,71 @@ export async function runDueDateReminders(
       })),
     ]);
 
-    if (items.length === 0 || !user.email) {
+    if (items.length === 0) {
       result.skipped += 1;
       continue;
     }
 
-    const delivery = await prisma.reminderDelivery.upsert({
-      where: { userId_targetDate: { userId: user.id, targetDate: start } },
-      create: { userId: user.id, targetDate: start },
-      update: {},
-    });
-    if (delivery.sentAt) {
-      result.skipped += 1;
-      continue;
+    if (user.emailReminderEnabled && user.email) {
+      const delivery = await prisma.reminderDelivery.upsert({
+        where: { userId_targetDate: { userId: user.id, targetDate: start } },
+        create: { userId: user.id, targetDate: start },
+        update: {},
+      });
+      if (delivery.sentAt) {
+        result.skipped += 1;
+      } else {
+        try {
+          const email = buildReminderEmail({
+            displayName: user.displayName,
+            items,
+            appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+          });
+          await sendReminderEmail({
+            to: user.email,
+            ...email,
+            idempotencyKey: `due-reminder/${user.id}/${start.toISOString()}`,
+          });
+          await prisma.reminderDelivery.update({
+            where: { id: delivery.id },
+            data: { sentAt: new Date() },
+          });
+          result.emailSent += 1;
+          result.sent += 1;
+        } catch (error) {
+          result.failed += 1;
+          console.error("期限通知メールの送信に失敗しました。", error);
+        }
+      }
     }
 
-    try {
-      const email = buildReminderEmail({
-        displayName: user.displayName,
-        items,
-        appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-      });
-      await sendReminderEmail({
-        to: user.email,
-        ...email,
-        idempotencyKey: `due-reminder/${user.id}/${start.toISOString()}`,
-      });
-      await prisma.reminderDelivery.update({
-        where: { id: delivery.id },
-        data: { sentAt: new Date() },
-      });
-      result.sent += 1;
-    } catch (error) {
-      result.failed += 1;
-      console.error("期限通知メールの送信に失敗しました。", error);
+    const payload = buildReminderPush(items);
+    for (const subscription of user.pushSubscriptions) {
+      if (
+        subscription.lastReminderDate &&
+        subscription.lastReminderDate.getTime() >= start.getTime()
+      ) {
+        result.skipped += 1;
+        continue;
+      }
+
+      try {
+        const status = await sendPushNotification(subscription, payload);
+        if (status === "expired") {
+          await prisma.pushSubscription.delete({ where: { id: subscription.id } });
+          result.skipped += 1;
+          continue;
+        }
+        await prisma.pushSubscription.update({
+          where: { id: subscription.id },
+          data: { lastReminderDate: start },
+        });
+        result.pushSent += 1;
+        result.sent += 1;
+      } catch (error) {
+        result.failed += 1;
+        console.error("期限前Push通知の送信に失敗しました。", error);
+      }
     }
   }
 

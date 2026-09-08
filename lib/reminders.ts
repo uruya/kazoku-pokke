@@ -61,3 +61,16 @@ export function buildReminderEmail({
     html: `<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.7;color:#1e293b"><p>${escapeHtml(greeting)}</p><p>明日が期限・予定日の項目があります。</p><ul style="padding-left:20px">${htmlItems}</ul><p><a href="${escapeHtml(safeAppUrl)}" style="display:inline-block;padding:12px 18px;border-radius:10px;background:#16836f;color:#fff;text-decoration:none;font-weight:700">かぞくポッケで確認</a></p><p style="font-size:12px;color:#64748b">通知設定はアプリの「その他」から変更できます。</p></div>`,
   };
 }
+
+export function buildReminderPush(items: ReminderItem[]) {
+  if (items.length === 0) {
+    throw new Error("通知対象がありません。");
+  }
+
+  const kinds = [...new Set(items.map((item) => item.kind))].join("・");
+  return {
+    title: "かぞくポッケ｜明日の予定",
+    body: `${kinds}の予定が${items.length}件あります。`,
+    url: "/",
+  };
+}

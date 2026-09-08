@@ -25,7 +25,7 @@ export default function InstallPage() {
       </PublicInfoSection>
       <PublicInfoSection title="追加したあと">
         <p>ホーム画面のアイコンから開いてください。ログイン画面が表示された場合は、いつもと同じメールアドレスでログインすると、参加している家庭を利用できます。</p>
-        <p>予定の表示・変更にはインターネット接続が必要です。ホーム画面への追加だけではプッシュ通知は届きません。現在は「その他」で期限前のメール通知を設定できます。</p>
+        <p>予定の表示・変更にはインターネット接続が必要です。スマホ通知を受け取る場合は、ログイン後に「その他」から、この端末の通知をONにしてください。</p>
         <p>LINEなどのアプリ内で開いていて追加できない場合は、SafariやChromeで開き直してください。パソコンでは対応ブラウザのメニューからインストールできます。</p>
         <Link href="/" className="inline-flex min-h-11 items-center font-bold text-[var(--primary)] underline">かぞくポッケを開く</Link>
       </PublicInfoSection>

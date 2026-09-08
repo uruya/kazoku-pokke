@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { buildReminderEmail, reminderWindow } from "../lib/reminders";
+import {
+  buildReminderEmail,
+  buildReminderPush,
+  reminderWindow,
+} from "../lib/reminders";
 
 describe("期限前メール通知", () => {
   it("日本時間の翌日だけを通知対象期間にする", () => {
@@ -30,5 +34,31 @@ describe("期限前メール通知", () => {
     expect(email.html).toContain("あや&lt;さん&gt;");
     expect(email.html).toContain("着替え袋 &amp; タオル");
     expect(email.html).not.toContain("あや<さん>");
+  });
+
+  it("Push通知では予定の件数と種類だけを表示し、ロック画面へ詳細を出さない", () => {
+    const push = buildReminderPush([
+      {
+        kind: "病院",
+        title: "表示しない予定名",
+        householdName: "表示しない家庭名",
+        date: new Date("2026-09-01T10:00:00+09:00"),
+        includesTime: true,
+      },
+      {
+        kind: "TODO",
+        title: "表示しないTODO",
+        householdName: "表示しない家庭名",
+        date: new Date("2026-09-01T00:00:00+09:00"),
+        includesTime: false,
+      },
+    ]);
+
+    expect(push).toMatchObject({
+      title: "かぞくポッケ｜明日の予定",
+      body: "病院・TODOの予定が2件あります。",
+      url: "/",
+    });
+    expect(JSON.stringify(push)).not.toContain("表示しない");
   });
 });

@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { BottomNavigation } from "@/components/bottom-navigation";
 import { ToastProvider } from "@/components/ui/toast";
 import { getSiteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
+  appleWebApp: { capable: true, title: "かぞくポッケ", statusBarStyle: "default" },
   metadataBase: new URL(getSiteUrl()),
   title: {
     default: "かぞくポッケ",
@@ -26,6 +27,8 @@ export const metadata: Metadata = {
     images: ["/og.png"],
   },
 };
+
+export const viewport: Viewport = { themeColor: "#26715f" };
 
 export default function RootLayout({
   children,

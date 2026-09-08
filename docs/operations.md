@@ -44,8 +44,8 @@ supabase db dump --db-url "$SUPABASE_DB_URL" -f data.sql --use-copy --data-only 
 5. 復旧後に、新規ログイン、家庭データ表示、招待、TODO作成、リマインド送信を確認する。
 6. 原因、失われた可能性がある期間、再発防止策を記録する。
 
-## 定期確認
+## Push通知の鍵管理\n\n- WebサービスとCronサービスには必ず同じVAPID公開鍵・秘密鍵を設定する。\n- VAPID秘密鍵はGitやログへ残さず、Railwayの環境変数で管理する。\n- VAPID鍵を変更すると既存端末は通知を再設定する必要があるため、漏えい対応以外では不用意にローテーションしない。\n\n## 定期確認
 
-- 毎月、Railwayのクラッシュ履歴、Supabaseのバックアップ、Resendの送信失敗、各サービスの利用上限を確認する。
+- 毎月、Railwayのクラッシュ履歴、Supabaseのバックアップ、ResendとWeb Pushの送信失敗、各サービスの利用上限を確認する。
 - 3か月に1回、最新バックアップを使った別環境への復元テストを行う。
 - Railway、Supabase、Resend、Cloudflareの管理者アカウントで多要素認証を使う。

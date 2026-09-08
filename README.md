@@ -43,14 +43,14 @@ Supabase標準のメール送信は開発確認用です。家族などプロジ
 
 利用規約は `/terms`、プライバシーポリシーは `/privacy`、問い合わせ先は `/contact` で公開されます。運用実態や利用サービスを変更した場合は、各ページの記載も更新してください。
 
-### 期限前メール通知の設定
+### 期限前メール・スマホ通知の設定
 
 1. ResendでAPIキーを作成し、`RESEND_API_KEY` に設定します。
 2. Resendで認証済みの送信元を `REMINDER_EMAIL_FROM` に設定します。
 3. 推測されにくいランダム文字列を `CRON_SECRET` に設定します。WebサービスとCronサービスで同じ値を使います。
-4. Railwayで同じリポジトリからCron用サービスを追加し、Start Commandを `npm run reminders:trigger`、Cron Scheduleを `0 23 * * *` にします。Railway CronはUTC基準のため、日本時間の毎朝8時に実行されます。
+4. Railwayで同じリポジトリからCron用サービスを追加し、Start Commandを `npm run reminders:trigger`、Cron Scheduleを `0 23 * * *` にします。Railway CronはUTC基準のため、日本時間の毎朝8時に実行されます。\n5. `npx web-push generate-vapid-keys` でVAPID鍵を生成し、公開鍵を `NEXT_PUBLIC_VAPID_PUBLIC_KEY`、秘密鍵を `VAPID_PRIVATE_KEY` に設定します。\n6. `VAPID_SUBJECT` に運営者の連絡先（例：`mailto:admin@example.com`）を設定します。WebサービスとCronサービスで同じVAPID設定を使います。
 
-Cron用サービスにも `NEXT_PUBLIC_APP_URL` と `CRON_SECRET` を設定してください。通知対象は「その他」で前日メール通知を有効にした利用者だけです。
+Cron用サービスにも `NEXT_PUBLIC_APP_URL`、`CRON_SECRET`、3つのVAPID設定を追加してください。メールとスマホ通知は「その他」で別々に有効化できます。スマホ通知は端末ごとの設定です。
 
 ローカルで `npm run reminders:trigger` を実行する場合は、プロジェクト直下の `.env` が自動で読み込まれます。独自ドメインをResendで認証するまでは、テスト用として `かぞくポッケ <onboarding@resend.dev>` を利用できますが、送信先はResendアカウント所有者のメールアドレスに限られます。家族など他の利用者へ送信する前に、認証済みドメインのメールアドレスへ変更してください。
 
@@ -62,7 +62,7 @@ Cron用サービスにも `NEXT_PUBLIC_APP_URL` と `CRON_SECRET` を設定し�
 - Tailwind CSS 4
 - Next.js Server Actions
 - Prisma 6
-- Resend Email API
+- Resend Email API\n- Web Push / VAPID
 - PostgreSQL 16
 - Supabase Auth（メールOTP・SSR Cookieセッション）
 - Vitest
@@ -96,6 +96,13 @@ Cron用サービスにも `NEXT_PUBLIC_APP_URL` と `CRON_SECRET` を設定し�
 - 利用者ごとに1日1通へまとめてResendから送信
 - 通知のON/OFF、同日重複送信防止、失敗時の再試行
 - 秘密トークンで保護した定期実行用Route Handler
+
+### 期限前スマホ通知
+
+- PWAのWeb PushでTODO・保育園・病院予定の前日通知を端末へ送信
+- 端末ごとのON/OFFとテスト通知、期限切れ購読の自動削除
+- ロック画面には予定名や家庭名を出さず、種類と件数だけを表示
+- iPhone・iPadはiOS 16.4以降でホーム画面へ追加した場合に対応
 
 ### TODO管理
 
@@ -182,7 +189,7 @@ npm run db:migrate
 
 Web・スマホアプリの比較、料金案、収益化までの優先順位と課金開始条件は [収益化方針](docs/monetization-strategy.md) を参照してください。
 
-ホーム画面への追加は `/install` で案内しています。オンラインで使うPWAとして起動でき、対応ブラウザでは追加ボタンを表示します。プッシュ通知・オフライン編集は未実装です。アイコンは既存の `app/icon.svg` から192px・512pxのPNGを生成しています。
+ホーム画面への追加は `/install` で案内しています。オンラインで使うPWAとして起動でき、対応ブラウザでは追加ボタンを表示します。Web Push通知に対応していますが、オフライン編集は未実装です。アイコンは既存の `app/icon.svg` から192px・512pxのPNGを生成しています。
 
 - Google・Appleなどの外部認証
 - 通知時刻・何日前かの個別設定

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { logout } from "@/app/actions/auth";
 import { NotificationSettingsForm } from "@/components/notification-settings-form";
+import { PushNotificationSettings } from "@/components/push-notification-settings";
 import { PageHeader } from "@/components/page-header";
 import { formatDateTime } from "@/lib/date";
 import { prisma } from "@/lib/prisma";
@@ -84,6 +85,16 @@ export default async function MorePage() {
           </p>
           <NotificationSettingsForm
             initialEnabled={user.emailReminderEnabled}
+          />
+        </section>
+
+        <section className="rounded-2xl border border-[var(--line)] bg-white p-4 md:col-span-2">
+          <h2 className="font-extrabold">期限前のスマホ通知</h2>
+          <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+            TODO・保育園・病院予定を、期限・予定日の1日前にこの端末へ通知します。端末ごとに設定できます。
+          </p>
+          <PushNotificationSettings
+            vapidPublicKey={process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? ""}
           />
         </section>
 

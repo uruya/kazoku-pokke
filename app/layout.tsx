@@ -12,18 +12,18 @@ export const metadata: Metadata = {
     template: "%s | かぞくポッケ",
   },
   description:
-    "保育園、育児TODO、病院予定、買い物を一か所で管理できる家族向けアプリ",
+    "保育園の持ち物・提出物・期限を家族で共有。準備できたらチェックして、ひとりで覚えて毎回伝える手間を減らします。",
   openGraph: {
-    title: "かぞくポッケ",
-    description: "育児の予定を、ひとつの場所に。",
+    title: "明日の保育園の準備を、家族で共有 | かぞくポッケ",
+    description: "保育園の持ち物・提出物・期限をまとめて、準備できたらチェック。家族への「明日これお願い」を、共有リストに。",
     type: "website",
     locale: "ja_JP",
     images: [{ url: "/og.png", width: 1731, height: 909 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "かぞくポッケ",
-    description: "育児の予定を、ひとつの場所に。",
+    title: "明日の保育園の準備を、家族で共有 | かぞくポッケ",
+    description: "保育園の持ち物・提出物・期限をまとめて、準備できたらチェック。家族への「明日これお願い」を、共有リストに。",
     images: ["/og.png"],
   },
 };

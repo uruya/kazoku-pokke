@@ -2,51 +2,35 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "家族の予定をひとつに",
+  title: "明日の保育園の準備を、家族で共有",
   description:
-    "かぞくポッケは、保育園、育児TODO、病院・予防接種、買い物を家族で共有できるアプリです。",
+    "保育園の持ち物・提出物・期限を家族で共有。準備できたらチェックして、ひとりで覚えて毎回伝える手間を減らします。",
 };
 
 const features = [
   {
-    mark: "✓",
-    eyebrow: "TODO",
-    title: "今日やることが、すぐわかる",
-    description:
-      "期限とカテゴリをつけて、頭の中にある小さな用事も家族の共有リストへ。完了まで迷いません。",
-    tone: "green",
-  },
-  {
     mark: "保",
-    eyebrow: "保育園",
-    title: "提出物と持ち物を、前日に思い出せる",
+    eyebrow: "持ち物・提出物",
+    title: "次に必要なものを、ひとつのリストに",
     description:
-      "行事・提出物・持ち物をまとめて確認。朝の『あれ持った？』を少し減らします。",
+      "着替えの補充、布団カバー、提出する書類。保育園の持ち物や提出物を、日付・期限と一緒に残せます。",
     tone: "mint",
   },
   {
-    mark: "＋",
-    eyebrow: "病院・予防接種",
-    title: "大事な予定を、家族の予定にする",
+    mark: "✓",
+    eyebrow: "家族で共有",
+    title: "準備できたら、チェックで伝わる",
     description:
-      "病院名やメモも一緒に残せるので、誰が連れていく日も共有しやすくなります。",
+      "招待した家族が同じリストを確認できます。準備が終わった項目を完了にすれば、何が残っているかもわかります。",
+    tone: "green",
+  },
+  {
+    mark: "日",
+    eyebrow: "前日の通知",
+    title: "朝を迎える前に、思い出せる",
+    description:
+      "通知を設定すると、予定や期限の前日にお知らせ。メール通知から始められ、対応端末ではスマホ通知も使えます。",
     tone: "orange",
-  },
-  {
-    mark: "□",
-    eyebrow: "買い物",
-    title: "買うものを、頼みごとにしない",
-    description:
-      "おむつや保育園用品を家族の買い物リストに。買ったらその場でチェックできます。",
-    tone: "yellow",
-  },
-  {
-    mark: "子",
-    eyebrow: "子どもメモ",
-    title: "サイズ情報を、探さず使える",
-    description:
-      "服や靴のサイズなど、買い物で必要な情報を子どもごとにひとまとめにします。",
-    tone: "peach",
   },
 ] as const;
 
@@ -58,13 +42,13 @@ const steps = [
   },
   {
     number: "02",
-    title: "わが家のノートを作る",
-    description: "家庭名と呼び名を決めたら、使う準備は完了です。",
+    title: "持ち物を1件登録",
+    description: "家庭を作ったら、次に必要な持ち物や提出物を1件登録してみましょう。",
   },
   {
     number: "03",
-    title: "家族を招待して共有",
-    description: "招待リンクを送って、同じ情報を家族みんなで見られます。",
+    title: "使いたくなったら家族も招待",
+    description: "まずはひとりで使えます。招待リンクを送れば、家族も同じリストを確認できます。",
   },
 ] as const;
 
@@ -118,7 +102,7 @@ function DashboardPreview() {
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-[11px] font-bold text-[var(--muted)]">
-                2026年9月5日（土）
+                画面イメージ・登録例
               </p>
               <h2 className="mt-1 text-xl font-extrabold tracking-tight">
                 わが家
@@ -160,7 +144,7 @@ function DashboardPreview() {
                 </p>
                 <p className="flex items-center gap-2 text-xs font-bold">
                   <span className="h-4 w-4 rounded-full border-2 border-[var(--primary)]" />
-                  予防接種を予約
+                  提出書類を確認
                 </p>
               </div>
             </div>
@@ -173,7 +157,7 @@ function DashboardPreview() {
                 </p>
                 <p className="flex items-center gap-2 font-bold">
                   <span className="w-9 font-extrabold text-[#87601c]">9/9</span>
-                  小児科
+                  提出物の締切
                 </p>
                 <p className="flex items-center gap-2 font-bold">
                   <span className="w-9 font-extrabold text-[var(--primary)]">9/11</span>
@@ -186,7 +170,7 @@ function DashboardPreview() {
           <div className="mt-3 flex items-center justify-between rounded-2xl border border-[var(--line)] bg-white p-3">
             <div>
               <p className="text-[10px] font-bold text-[var(--muted)]">買うもの</p>
-              <p className="mt-1 text-xs font-extrabold">おしりふき、牛乳 ほか2件</p>
+              <p className="mt-1 text-xs font-extrabold">おむつ、おしりふき、着替え</p>
             </div>
             <span className="text-lg text-[var(--accent)]">□</span>
           </div>
@@ -230,21 +214,21 @@ export default function AboutPage() {
             <div>
               <p className="inline-flex items-center gap-2 rounded-full bg-[var(--accent-soft)] px-3 py-1.5 text-xs font-extrabold text-[#a64f31]">
                 <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
-                0〜3歳の子育て家庭へ
+                保育園の準備を、ひとりで覚えている方へ
               </p>
-              <h1 className="mt-5 max-w-xl text-[2.55rem] font-black leading-[1.18] tracking-[-0.055em] text-[#203b34] sm:text-5xl lg:text-[3.65rem]">
-                家族の「次なにする？」を、
-                <span className="text-[var(--primary)]">迷わない毎日</span>へ。
+              <h1 className="mt-5 max-w-xl text-[2.55rem] font-black leading-[1.18] tracking-[-0.055em] text-[#203b34] sm:text-5xl lg:text-[3.2rem]">
+                明日の保育園、<br />何を持っていく？<br />
+                <span className="text-[var(--primary)]">家族で共有。</span>
               </h1>
               <p className="mt-6 max-w-lg text-base leading-8 text-[var(--muted)] sm:text-lg">
-                保育園の提出物、病院の予定、買い物、家事。散らばりがちな育児の情報を、家族みんなの共有ノートにまとめます。
+                持ち物・提出物・期限をまとめて、準備できたらチェック。ひとりで覚えて、家族に毎回伝える手間を減らします。
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Link
                   href="/login?next=/welcome"
                   className="flex min-h-13 items-center justify-center rounded-2xl bg-[var(--primary)] px-6 text-base font-extrabold text-white shadow-[0_10px_20px_rgba(38,113,95,0.22)] transition-transform hover:-translate-y-0.5"
                 >
-                  メールだけではじめる
+                  無料で保育園の準備をはじめる
                   <span aria-hidden="true" className="ml-2 text-lg">→</span>
                 </Link>
                 <a
@@ -268,17 +252,17 @@ export default function AboutPage() {
           <div className="flex items-center gap-3 sm:col-span-3 lg:col-span-1">
             <span className="text-2xl text-[var(--accent)]">“</span>
             <p className="text-sm font-extrabold leading-6">
-              覚えておくことを減らして、<br />
-              子どもと向き合う時間を増やす。
+              「あれ、持った？」を減らして、<br />
+              朝の準備を家族で。
             </p>
           </div>
           <div className="flex items-center gap-3 border-[var(--line)] sm:border-l sm:pl-5">
             <span className="text-xl font-black text-[var(--primary)]">01</span>
-            <p className="text-xs font-bold leading-5 text-[var(--muted)]">今日と今週に<br />集中できる</p>
+            <p className="text-xs font-bold leading-5 text-[var(--muted)]">持ち物と期限を<br />まとめて確認</p>
           </div>
           <div className="flex items-center gap-3 border-[var(--line)] sm:border-l sm:pl-5">
             <span className="text-xl font-black text-[var(--primary)]">02</span>
-            <p className="text-xs font-bold leading-5 text-[var(--muted)]">家族の予定を<br />同じ場所で共有</p>
+            <p className="text-xs font-bold leading-5 text-[var(--muted)]">準備の完了を<br />家族で共有</p>
           </div>
           <div className="flex items-center gap-3 border-[var(--line)] sm:border-l sm:pl-5">
             <span className="text-xl font-black text-[var(--primary)]">03</span>
@@ -291,10 +275,10 @@ export default function AboutPage() {
         <div className="max-w-2xl">
           <p className="text-xs font-extrabold tracking-[0.18em] text-[var(--primary)]">FEATURES</p>
           <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight sm:text-4xl">
-            家族の「抜け」が減る、<br className="sm:hidden" />5つの場所。
+            明日の準備を、<br className="sm:hidden" />家族で進める。
           </h2>
           <p className="mt-4 leading-7 text-[var(--muted)]">
-            いろいろなアプリやメモを行き来しなくても、子育ての毎日に必要なことがひとつにつながります。
+            持ち物を登録して、準備したらチェック。次に必要なものを、家族がそれぞれ確認できます。
           </p>
         </div>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -302,6 +286,9 @@ export default function AboutPage() {
             <FeatureCard key={feature.eyebrow} feature={feature} />
           ))}
         </div>
+        <p className="mt-6 text-sm leading-7 text-[var(--muted)]">
+          保育園の準備から始めて、必要になったら買い物リストや病院の予定、子どもの服・靴のサイズも共有できます。
+        </p>
       </section>
 
       <section className="bg-[var(--primary)] text-white">
@@ -309,10 +296,10 @@ export default function AboutPage() {
           <div>
             <p className="text-xs font-extrabold tracking-[0.18em] text-white/60">HOW IT WORKS</p>
             <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight sm:text-4xl">
-              3分で、<br />わが家のノートに。
+              まずは、<br />持ち物をひとつ。
             </h2>
             <p className="mt-5 max-w-sm leading-7 text-white/75">
-              使い始めるために必要なのは、メールアドレスだけ。家族の状況に合わせて、あとから少しずつ整えられます。
+              メールで登録して家庭を作ったら、次の登園日に必要なものを1件追加。家族の招待は、あとからでも大丈夫です。
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
@@ -331,13 +318,13 @@ export default function AboutPage() {
         <div>
           <p className="text-xs font-extrabold tracking-[0.18em] text-[var(--primary)]">FOR YOUR FAMILY</p>
           <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight sm:text-4xl">
-            こんな毎日に、<br />そっと効きます。
+            こんな準備に、<br />心当たりはありませんか。
           </h2>
           <ul className="mt-7 space-y-4">
             {[
-              "連絡帳・カレンダー・チャットを行き来している",
-              "『誰かが覚えているはず』の用事が増えてきた",
-              "保育園の持ち物や子どものサイズをすぐ確認したい",
+              "保育園の持ち物を覚えて、家族に毎回伝えている",
+              "提出物の締切を、当日の朝に思い出す",
+              "着替えやおむつの補充が済んだか、すぐ確認したい",
             ].map((item) => (
               <li key={item} className="flex items-start gap-3 text-sm font-bold leading-6">
                 <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--primary-soft)] text-xs font-black text-[var(--primary)]">✓</span>
@@ -365,16 +352,16 @@ export default function AboutPage() {
         <div className="mx-auto max-w-6xl overflow-hidden rounded-[2.25rem] bg-[#e9f1e5] px-6 py-12 text-center sm:px-10 sm:py-16">
           <p className="text-xs font-extrabold tracking-[0.18em] text-[var(--primary)]">START SMALL</p>
           <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight sm:text-4xl">
-            まずは、明日の予定を<br className="sm:hidden" />ひとつ書いてみる。
+            まずは、次の登園日の持ち物を<br className="sm:hidden" />ひとつ書いてみる。
           </h2>
           <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-[var(--muted)]">
-            家族の毎日を整える最初の一歩を、メールだけではじめられます。
+            着替えの補充でも、提出する書類でも。ひとつ登録して、次の準備に使ってみてください。
           </p>
           <Link
             href="/login?next=/welcome"
             className="mt-7 inline-flex min-h-13 items-center rounded-2xl bg-[var(--primary)] px-7 text-base font-extrabold text-white shadow-[0_10px_20px_rgba(38,113,95,0.2)] transition-transform hover:-translate-y-0.5"
           >
-            かぞくポッケをはじめる
+            無料で持ち物を登録する
             <span aria-hidden="true" className="ml-2 text-lg">→</span>
           </Link>
         </div>

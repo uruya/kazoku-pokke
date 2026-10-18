@@ -189,7 +189,7 @@ export function PushNotificationSettings({
   return (
     <div className="mt-4">
       <div className="flex min-h-14 items-center gap-3 rounded-xl bg-[var(--surface)] px-4">
-        <span className="flex-1 font-bold">この端末で前日通知を受け取る</span>
+        <span className="flex-1 font-bold">この端末で家族の更新・前日のまとめを受け取る</span>
         <span
           className={`rounded-full px-3 py-1 text-xs font-extrabold ${
             deviceState === "on"

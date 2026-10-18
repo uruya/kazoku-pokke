@@ -17,7 +17,7 @@ self.addEventListener("push", (event) => {
       icon: "/icon-192.png",
       badge: "/icon-192.png",
       data: { url },
-      tag: "due-date-reminder",
+      tag: typeof data.tag === "string" ? data.tag : "due-date-reminder",
     }),
   );
 });

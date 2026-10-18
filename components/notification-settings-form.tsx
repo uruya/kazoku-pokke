@@ -39,7 +39,7 @@ export function NotificationSettingsForm({
           onChange={(event) => setEnabled(event.target.checked)}
           className="h-6 w-6 shrink-0 accent-[var(--primary)]"
         />
-        <span className="flex-1 font-bold">前日メール通知を受け取る</span>
+        <span className="flex-1 font-bold">家族の更新・前日のまとめをメールで受け取る</span>
         <span
           className={`rounded-full px-3 py-1 text-xs font-extrabold ${
             enabled

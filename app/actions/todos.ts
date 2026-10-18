@@ -1,6 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { hasImportantChanges } from "@/lib/family-notification-content";
+import { notifyFamilyChange } from "@/lib/family-notifications";
 import { TODO_CATEGORIES, isOptionValue } from "@/lib/constants";
 import { dateFromInput } from "@/lib/date";
 import { optionalText, requiredText } from "@/lib/form-data";
@@ -28,14 +30,21 @@ function refreshTodos() {
 }
 
 export async function createTodo(formData: FormData) {
-  const { householdId } = await requireHousehold();
+  const { householdId, userId } = await requireHousehold();
   await prisma.todo.create({ data: { ...todoInput(formData), householdId } });
+  notifyFamilyChange({ householdId, actorUserId: userId, kind: "TODO", action: "added" });
   refreshTodos();
 }
 
 export async function updateTodo(id: string, formData: FormData) {
-  const { householdId } = await requireHousehold();
-  await prisma.todo.update({ where: { id_householdId: { id, householdId } }, data: todoInput(formData) });
+  const { householdId, userId } = await requireHousehold();
+  const where = { id_householdId: { id, householdId } };
+  const data = todoInput(formData);
+  const previous = await prisma.todo.findUniqueOrThrow({ where });
+  await prisma.todo.update({ where, data });
+  if (hasImportantChanges(previous, data, ["title", "category", "dueDate"])) {
+    notifyFamilyChange({ householdId, actorUserId: userId, kind: "TODO", action: "updated" });
+  }
   refreshTodos();
 }
 
@@ -51,7 +60,8 @@ export async function toggleTodo(id: string) {
 }
 
 export async function deleteTodo(id: string) {
-  const { householdId } = await requireHousehold();
+  const { householdId, userId } = await requireHousehold();
   await prisma.todo.delete({ where: { id_householdId: { id, householdId } } });
+  notifyFamilyChange({ householdId, actorUserId: userId, kind: "TODO", action: "deleted" });
   refreshTodos();
 }

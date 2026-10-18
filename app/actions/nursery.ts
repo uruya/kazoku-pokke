@@ -1,6 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { hasImportantChanges } from "@/lib/family-notification-content";
+import { notifyFamilyChange } from "@/lib/family-notifications";
 import { NURSERY_TYPES, isOptionValue } from "@/lib/constants";
 import { dateFromInput } from "@/lib/date";
 import { optionalText, requiredText } from "@/lib/form-data";
@@ -26,17 +28,21 @@ function refreshNursery() {
 }
 
 export async function createNurseryItem(formData: FormData) {
-  const { householdId } = await requireHousehold();
+  const { householdId, userId } = await requireHousehold();
   await prisma.nurseryItem.create({ data: { ...nurseryInput(formData), householdId } });
+  notifyFamilyChange({ householdId, actorUserId: userId, kind: "保育園", action: "added" });
   refreshNursery();
 }
 
 export async function updateNurseryItem(id: string, formData: FormData) {
-  const { householdId } = await requireHousehold();
-  await prisma.nurseryItem.update({
-    where: { id_householdId: { id, householdId } },
-    data: nurseryInput(formData),
-  });
+  const { householdId, userId } = await requireHousehold();
+  const where = { id_householdId: { id, householdId } };
+  const data = nurseryInput(formData);
+  const previous = await prisma.nurseryItem.findUniqueOrThrow({ where });
+  await prisma.nurseryItem.update({ where, data });
+  if (hasImportantChanges(previous, data, ["title", "type", "date"])) {
+    notifyFamilyChange({ householdId, actorUserId: userId, kind: "保育園", action: "updated" });
+  }
   refreshNursery();
 }
 
@@ -52,7 +58,8 @@ export async function toggleNurseryItem(id: string) {
 }
 
 export async function deleteNurseryItem(id: string) {
-  const { householdId } = await requireHousehold();
+  const { householdId, userId } = await requireHousehold();
   await prisma.nurseryItem.delete({ where: { id_householdId: { id, householdId } } });
+  notifyFamilyChange({ householdId, actorUserId: userId, kind: "保育園", action: "deleted" });
   refreshNursery();
 }

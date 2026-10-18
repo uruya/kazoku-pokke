@@ -79,9 +79,9 @@ export default async function MorePage() {
           <span aria-hidden="true" className="text-[var(--muted)]">›</span>
         </Link>
         <section className="rounded-2xl border border-[var(--line)] bg-white p-4 md:col-span-2">
-          <h2 className="font-extrabold">期限前のメール通知</h2>
+          <h2 className="font-extrabold">メール通知</h2>
           <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-            TODO・保育園・病院予定を、期限・予定日の1日前にまとめてメールします。
+            TODO・保育園・病院予定の追加・重要な変更・削除を、操作した本人以外の家族へメールします。前日のまとめは本人を含め、通知をONにした全員へ送ります。メモだけの編集や完了操作では通知しません。
           </p>
           <NotificationSettingsForm
             initialEnabled={user.emailReminderEnabled}
@@ -89,9 +89,9 @@ export default async function MorePage() {
         </section>
 
         <section className="rounded-2xl border border-[var(--line)] bg-white p-4 md:col-span-2">
-          <h2 className="font-extrabold">期限前のスマホ通知</h2>
+          <h2 className="font-extrabold">スマホ通知</h2>
           <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-            TODO・保育園・病院予定を、期限・予定日の1日前にこの端末へ通知します。端末ごとに設定できます。
+            家族によるTODO・保育園・病院予定の追加・重要な変更・削除と、前日のまとめをこの端末へ通知します。自分の操作では通知しません。端末ごとに設定できます。
           </p>
           <PushNotificationSettings
             vapidPublicKey={process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? ""}
